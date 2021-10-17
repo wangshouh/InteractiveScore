@@ -17,3 +17,7 @@ A python script of zhihuishu interactive score
 <img src = 'https://s3.bmp.ovh/imgs/2021/10/213aeb631b4c4231.png' />
 注意：`cookies`需要复制全部cookies，并改写成符合Python字典的形式，如下图：
 <img src = 'https://s3.bmp.ovh/imgs/2021/10/39adc24855f188a3.png' />
+
+## 免责声明:
+
+本人不对此程序所造成的一切后果担责。
