@@ -20,4 +20,6 @@ A python script of zhihuishu interactive score
 
 ## 免责声明:
 
-本人不对此程序所造成的一切后果担责。
+**本项目使用者在使用前应了解本项目所带来的风险！**
+
+**本人不对此项目所造成的一切后果担责！**
