@@ -1,7 +1,6 @@
 import requests
 import json
 import time
-import re
 
 
 def getQuestionsId(uuid, courseId, recruitId) -> list:
