@@ -13,8 +13,8 @@ A python script of zhihuishu interactive score
 <img src = 'https://s3.bmp.ovh/imgs/2021/10/91233aee0b39f737.png' />
 2. `coureseId` 为互动问答网页网址 `questionDetail/` 后的第一串字符，`recruitId`也在`url`中。
 <img src = 'https://s3.bmp.ovh/imgs/2021/10/0a2fdbbf27d321d7.png' />
-3.`cookies`从F12控制台中相关选项卡中获得，如下图:
-<img src = 'https://s3.bmp.ovh/imgs/2021/10/213aeb631b4c4231.png' />
+3.打开任一问题的页面，打开F12控制台，点击我来回答，`cookies`从F12控制台中相关选项卡中获得，如下图:
+<img src = 'https://s3.bmp.ovh/imgs/2021/10/eb52a6e0996a724e.png' />
 
 
 ## 免责声明:
