@@ -1,21 +1,21 @@
 # InteractiveScore
 A python script of zhihuishu interactive score
 # 一个基于requests库的python脚本用于智慧树互动答题
-需要填写以下内容:
-1. uuid
-2. coureseId
-3. recruitId
-4. cookies
 
-获取方法如下：
+### 使用方法
+1. 执行`pip install -r requirements`安装相关依赖
+2. 请按终端指示输入账号、密码
 
-1.打开互动问答页面，按下F12打开网页控制台，选择 `Network` 选项卡，寻找uuid。如下图：
-<img src = 'https://s3.bmp.ovh/imgs/2021/10/91233aee0b39f737.png' />
-2. `coureseId` 为互动问答网页网址 `questionDetail/` 后的第一串字符，`recruitId`也在`url`中。
-<img src = 'https://s3.bmp.ovh/imgs/2021/10/0a2fdbbf27d321d7.png' />
-3.打开任一问题的页面，打开F12控制台，点击我来回答，`cookies`从F12控制台中相关选项卡中获得，如下图:
-<img src = 'https://s3.bmp.ovh/imgs/2021/10/eb52a6e0996a724e.png' />
+### 注意
+- 此脚本存储使用了json文件，如需更改请自行改造
+- 脚本运行后不会自行删除json中的相应记录，如果程序运行中断，请自行删除对应json中的字段记录
+- lxml安装需要C语言编译器，如不具备相关软件，请使用whl下载
+- 请务必浏览本项目的源代码
 
+### lxml安装教程
+1. 前往`https://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml`下载对应的`.whl`文件，说明cp37对应python 3.7, AMD64 对应64位系统
+2. `pip install wheel`
+3. 使用`pip install .whl文件地址` 安装lxml
 
 ## 免责声明:
 
