@@ -1,9 +1,12 @@
 import requests
 import json
 import time
+from bs4 import BeautifulSoup
+import login
+from basicinfo import getstudentinfo, getsharecourse
 
 
-def getQuestionsId(uuid, courseId, recruitId) -> list:
+def getQuestionsId(uuid, courseId, recruitId, s) -> list:
     """
     获取前50条问题
     """
@@ -13,11 +16,11 @@ def getQuestionsId(uuid, courseId, recruitId) -> list:
     params = {
         "uuid": uuid,
         "courseId": courseId,
-        "pageIndex": "0",
-        "pageSize": "50",
+        "pageIndex": "0", #开始题目的索引
+        "pageSize": "50", #题目总数
         "recruitId": recruitId
     }
-    questionData = requests.get(questionUrl, params=params, headers=headers)
+    questionData = s.get(questionUrl, params=params, headers=headers)
     r = json.loads(questionData.text)
     question_list = r["rt"]["questionInfoList"]
 
@@ -26,7 +29,7 @@ def getQuestionsId(uuid, courseId, recruitId) -> list:
     return questionid_list
 
 
-def getAnswer(uuid, courseId, recruitId, questionId) -> str:
+def getAnswer(uuid, courseId, recruitId, questionId, s) -> str:
     """
     获取最近一条答案
     """
@@ -41,13 +44,13 @@ def getAnswer(uuid, courseId, recruitId, questionId) -> str:
         "pageIndex": "0",
         "pageSize": "1"
     }
-    answerData = requests.get(answerUrl, params=params, headers=headers)
+    answerData = s.get(answerUrl, params=params, headers=headers)
     r = json.loads(answerData.text)
     answerContent = r["rt"]["answerInfos"][0]["answerContent"]
     return answerContent
 
 
-def postAnswer(uuid, qid, answer, courseId, recruitId, cookies):
+def postAnswer(uuid, qid, answer, courseId, recruitId, s):
     '''
     发送答案
     '''
@@ -65,31 +68,35 @@ def postAnswer(uuid, qid, answer, courseId, recruitId, cookies):
         "Content-Type": "application/x-www-form-urlencoded",
         "Host": "creditqa.zhihuishu.com",
         "Content-Length": "140",
-        "Cookie": cookies
     }
 
-    returnmsg = requests.post(url, data=data, headers=headers)
+    returnmsg = s.post(url, data=data, headers=headers)
     r = json.loads(returnmsg.text)
     msg = r["msg"]
     return msg
 
+getstudentinfo()
+with open('student.json', 'r') as f:
+    student = json.load(f)
+username = student['username']
+password = student['password']
+s, uuid = login.mainlogin(username, password)
+getsharecourse(s,uuid)
+with open('courseinfo.json', 'r') as f:
+    courseinfos = json.load(f)
 
-def getCookie(cookies):
-    dicts = {}
-    lis = re.split(';|=', cookies)
-    for i in range(0, len(lis)-1, 2):
-        dicts[lis[i].strip()] = lis[i+1]
-    return dicts
-
-
-uuid = ""
-courseId = ""
-recruitId = ""
-cookies = ''
-id_list = getQuestionsId(uuid, courseId, recruitId)
-for questionId in id_list:
-    print(questionId)
-    answer = getAnswer(uuid, courseId, recruitId, questionId)
-    result = postAnswer(uuid, questionId, answer, courseId, recruitId, cookies)
-    print(result)
-    time.sleep(3)
+for courseinfo in courseinfos:
+    courseId = courseinfo['courseId']
+    recruitId = courseinfo['recruitId']
+    coursename = courseinfo['courseName']
+    try:
+        id_list = getQuestionsId(uuid, courseId, recruitId, s)
+    except:
+        print("出现问题，请打开main.py，调整getAnswer函数中的params参数")
+    print('正在进行{}的回答'.format(coursename))
+    for questionId in id_list:
+        print(questionId)
+        answer = getAnswer(uuid, courseId, recruitId, questionId, s)
+        result = postAnswer(uuid, questionId, answer, courseId, recruitId, s)
+        print(result)
+        time.sleep(3)
