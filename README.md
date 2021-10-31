@@ -17,7 +17,7 @@ A python script of zhihuishu interactive score
 2. `pip install wheel`
 3. 使用`pip install .whl文件地址` 安装lxml
 
-## 免责声明:
+## 免责声明
 
 **本项目使用者在使用前应了解本项目所带来的风险！**
 
