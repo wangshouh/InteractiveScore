@@ -3,10 +3,10 @@ import json
 import time
 from bs4 import BeautifulSoup
 import login
-from basicinfo import getstudentinfo, getsharecourse
+from basicinfo import getstudentinfo, getsharecourse, selectCourse
 
 
-def getQuestionsId(uuid, courseId, recruitId, s) -> list:
+def getQuestionsId(uuid, courseId, recruitId, s, numberOfQuestions) -> list:
     """
     获取前50条问题
     """
@@ -16,8 +16,8 @@ def getQuestionsId(uuid, courseId, recruitId, s) -> list:
     params = {
         "uuid": uuid,
         "courseId": courseId,
-        "pageIndex": "0", #开始题目的索引
-        "pageSize": "50", #题目总数
+        "pageIndex": "0",  # 开始题目的索引
+        "pageSize": numberOfQuestions,  # 题目总数
         "recruitId": recruitId
     }
     questionData = s.get(questionUrl, params=params, headers=headers)
@@ -75,28 +75,29 @@ def postAnswer(uuid, qid, answer, courseId, recruitId, s):
     msg = r["msg"]
     return msg
 
+
 getstudentinfo()
 with open('student.json', 'r') as f:
     student = json.load(f)
 username = student['username']
 password = student['password']
 s, uuid = login.mainlogin(username, password)
-getsharecourse(s,uuid)
-with open('courseinfo.json', 'r') as f:
-    courseinfos = json.load(f)
+getsharecourse(s, uuid)
 
-for courseinfo in courseinfos:
-    courseId = courseinfo['courseId']
-    recruitId = courseinfo['recruitId']
-    coursename = courseinfo['courseName']
-    try:
-        id_list = getQuestionsId(uuid, courseId, recruitId, s)
-    except:
-        print("出现问题，请打开main.py，调整getAnswer函数中的params参数")
-    print('正在进行{}的回答'.format(coursename))
-    for questionId in id_list:
-        print(questionId)
-        answer = getAnswer(uuid, courseId, recruitId, questionId, s)
-        result = postAnswer(uuid, questionId, answer, courseId, recruitId, s)
-        print(result)
-        time.sleep(3)
+courseinfo = selectCourse()
+numberOfQuestions = eval(input('请输入刷题个数：'))
+
+courseId = courseinfo['courseId']
+recruitId = courseinfo['recruitId']
+coursename = courseinfo['courseName']
+try:
+    id_list = getQuestionsId(uuid, courseId, recruitId, s, numberOfQuestions)
+except:
+    print("出现问题，请打开main.py，调整getAnswer函数中的params参数")
+print('正在进行{}的回答'.format(coursename))
+for questionId in id_list:
+    print(questionId)
+    answer = getAnswer(uuid, courseId, recruitId, questionId, s)
+    result = postAnswer(uuid, questionId, answer, courseId, recruitId, s)
+    print(result)
+    time.sleep(3)
