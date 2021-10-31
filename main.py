@@ -96,8 +96,7 @@ except:
     print("出现问题，请打开main.py，调整getAnswer函数中的params参数")
 print('正在进行{}的回答'.format(coursename))
 for questionId in id_list:
-    print(questionId)
     answer = getAnswer(uuid, courseId, recruitId, questionId, s)
     result = postAnswer(uuid, questionId, answer, courseId, recruitId, s)
-    print(result)
+    print('{:<15}{}'.format(questionId, result))
     time.sleep(3)
