@@ -33,10 +33,6 @@ def do_login(s, username, password, lt):
             'remember': 'on', }
     resp = s.post(url, data=data)
     soup = BeautifulSoup(resp.content.decode('utf8'), 'lxml')
-    if soup.title.string == '智慧树在线学堂':
-        print('登陆成功')
-    else:
-        print('登陆失败')
 
 
 def getuuid(s):
