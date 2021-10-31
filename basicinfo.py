@@ -2,6 +2,7 @@ import os.path
 import json
 import time
 
+
 def getstudentinfo():
     """
     获取账号、密码并储存
@@ -13,6 +14,7 @@ def getstudentinfo():
         with open('student.json', 'w') as f:
             json.dump(studentinfo, f)
 
+
 def getservertime():
     """
     获取服务器时间
@@ -22,7 +24,8 @@ def getservertime():
     date = time.strftime("%Y-%m-%dT%H:%M:%S.000Z", timeArray)
     return date
 
-def getsharecourse(s,uuid):
+
+def getsharecourse(s, uuid):
     """
     获取课程列表并储存
     """
@@ -33,11 +36,20 @@ def getsharecourse(s,uuid):
             'uuid': uuid,
             'date': getservertime()
             }
-    resp = s.post(url,data=data)
+    resp = s.post(url, data=data)
     sharecourseinfo = resp.json()['result']['courseOpenDtos']
     if not os.path.exists('courseinfo.json'):
         with open('courseinfo.json', 'w') as f:
             json.dump(sharecourseinfo, f)
-    print("课程信息表存储完毕，如需改变请自行json前往更改")
 
-    
+
+def selectCourse():
+    n = 0
+    with open('courseinfo.json', 'r') as f:
+        courseinfos = json.load(f)
+    print("{:^5}{:^20}".format('序号', '课程名'))
+    for item in courseinfos:
+        print("{:^5}{:^20}".format(n, item['courseName']))
+        n += 1
+    selectCourseId = eval(input('请输入您选择的课程序号(一次仅可选择一个科目): '))
+    return courseinfos[selectCourseId]
